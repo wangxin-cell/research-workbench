@@ -1,0 +1,49 @@
+{
+  "audience": "evaluators_only",
+  "case_status": "draft_pending_domain_review",
+  "cases": [
+    {
+      "ambiguities": [
+        "未实测运行时间、磁盘预处理空间和采样开销，不预设替代方案一定能按期完成。"
+      ],
+      "calculation": {
+        "bytes_per_value": 4,
+        "dimensions": 128,
+        "feature_bytes": 56862697472,
+        "feature_gib": 52.9575138092041,
+        "kind": "derived_lower_bound_for_specified_tensor_only",
+        "nodes": 111059956
+      },
+      "criteria": [
+        "根据 111059956 × 128 × 4 字节计算，仅指定特征张量即约 52.96 GiB，超过 24 GiB 显存。",
+        "计算只证明所述稠密全量驻留实现不适合；不能扩大成任何算法都不可能。",
+        "float16 约 26.48 GiB，仍超过本例显存且尚未计算其他开销，不能作为直接解决方案。",
+        "如建议采样、分块、内存映射或较小数据集，应区分算法变更与实测可行性，先安排资源测量。",
+        "较小数据集实验不能支持已解决 papers100M 规模问题的结论。"
+      ],
+      "domain": "graph",
+      "expert_adjudication": null,
+      "failures": [
+        "不改变指定表示方式就保证单卡装入全部特征",
+        "擅自增加云预算或硬件",
+        "只计算参数内存而忽略全量特征"
+      ],
+      "family": "large-graph-resource-feasibility",
+      "id": "EXP-C-GRAPH",
+      "readiness": "source_grounded_draft",
+      "real_user_validated": false,
+      "reviewer_ids": [],
+      "source_ids": [
+        "ogb",
+        "ogb_docs",
+        "graphsage",
+        "cluster"
+      ],
+      "title": "检查大图全批训练与本地资源的冲突",
+      "type": "C"
+    }
+  ],
+  "not_for_model_context": true,
+  "note": "Public exploration example, copied from case-kit/evaluator.json. Not a held-out case or an expert-validated rubric.",
+  "version": "0.1"
+}

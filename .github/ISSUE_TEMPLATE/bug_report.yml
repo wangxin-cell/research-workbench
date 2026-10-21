@@ -1,0 +1,36 @@
+name: Software bug / 软件问题
+description: Report a reproducible failure in the local workbench.
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe a minimal reproduction. Do not upload keys, private run folders, unpublished research, or full copyrighted PDFs.
+        可以使用中文。请提供最小复现，不要上传密钥、私人运行记录、未公开研究或受版权限制的完整 PDF。
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce / 复现步骤
+      description: Include the command or UI action and a small public or synthetic input if needed.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior / 预期行为
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior / 实际行为
+      description: Include the exact error with private information removed.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment / 环境
+      description: Operating system, Python version, project version or commit, and whether the PDF extra is installed.
+    validations:
+      required: true

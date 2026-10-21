@@ -1,0 +1,45 @@
+name: Research feedback / 研究建议反馈
+description: Show a specific useful decision, unsupported claim, or missed constraint.
+title: "[Research feedback] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Concrete decisions and counterexamples help evaluate usefulness. Positive and negative feedback are both useful.
+        Please share only material you are allowed to make public. A short paraphrase and paper links are sufficient.
+        欢迎中文反馈。请说明具体的判断或反例，仅分享可公开材料；简短转述和论文链接即可。
+  - type: textarea
+    id: context
+    attributes:
+      label: Research question and constraints / 研究问题与条件
+      description: What decision were you trying to make? What were the time, compute, data, or skill constraints?
+    validations:
+      required: true
+  - type: textarea
+    id: statement
+    attributes:
+      label: Specific report statement or recommendation / 具体判断或建议
+      description: Identify a claim, proposed contribution, or first experiment. Summarize private report text rather than posting the whole run.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Supporting or conflicting evidence / 支持或反对的证据
+      description: Give public paper links and section or page locations. State when the evidence is still uncertain.
+    validations:
+      required: true
+  - type: textarea
+    id: decision
+    attributes:
+      label: What changed in your decision? / 对你的决定有什么影响
+      description: Continue, revise, stop, or seek evidence? If nothing changed, say so. If reporting time saved, explain how you measured it.
+    validations:
+      required: true
+  - type: textarea
+    id: setup
+    attributes:
+      label: Analysis setup / 分析设置
+      description: Model and date if known, one-call or reviewed workflow, supplied reading scope, and your familiarity with this research topic. Do not include keys or identifying details.
+    validations:
+      required: true

@@ -1,0 +1,238 @@
+{
+  "version": "0.1",
+  "purpose": "exploration_calibration",
+  "origin": "assistant_constructed_from_public_literature",
+  "real_user_cases": false,
+  "mode": "fixed_source_summary_pilot",
+  "limitations": "只检验给定摘要材料下的判断；不测自主检索覆盖率、全文理解或最新新颖性。来源摘要为转述，不是原文摘录。",
+  "cases": [
+    {
+      "id": "EXP-A-GRAPH",
+      "user_question": "我读过这些图学习论文，但还没有自己的问题。请给出最多三个值得进一步核查的研究问题，并说明最接近工作、潜在价值和第一周验证步骤。不要把论文已经完成的分析当作新贡献。",
+      "resources": {
+        "skills": [
+          "Python",
+          "PyTorch",
+          "基本 GNN"
+        ],
+        "gpu": "单张 24 GiB",
+        "ram_gib": 32,
+        "time_weeks": 6,
+        "data": "公开节点分类数据集",
+        "cloud_budget": "无"
+      },
+      "sources": [
+        {
+          "id": "gcn",
+          "title": "Semi-Supervised Classification with Graph Convolutional Networks",
+          "url": "https://arxiv.org/abs/1609.02907",
+          "locator": "Abstract",
+          "summary": "提出利用图结构和节点特征进行半监督分类的图卷积模型。",
+          "read_scope": "abstract",
+          "checked_on": "2026-10-19",
+          "summary_author": "assistant",
+          "human_verified": false,
+          "fulltext_snapshot_sha256": null
+        },
+        {
+          "id": "h2gcn",
+          "title": "Beyond Homophily in Graph Neural Networks: Current Limitations and Effective Designs",
+          "url": "https://arxiv.org/abs/2006.11468",
+          "locator": "Abstract",
+          "summary": "提出自我与邻居表示分离、高阶邻域及中间表示组合，并以 H2GCN 评估这些设计。",
+          "read_scope": "abstract",
+          "checked_on": "2026-10-19",
+          "summary_author": "assistant",
+          "human_verified": false,
+          "fulltext_snapshot_sha256": null
+        },
+        {
+          "id": "heterophily",
+          "title": "A critical look at the evaluation of GNNs under heterophily: Are we really making progress?",
+          "url": "https://arxiv.org/pdf/2302.11640",
+          "locator": "Abstract; main text dataset discussion",
+          "summary": "作者报告 Squirrel 和 Chameleon 存在重复节点及训练测试泄漏问题，去重会改变模型评估结果，并提出一组新的异配图评估数据集。",
+          "read_scope": "pdf_text",
+          "checked_on": "2026-10-19",
+          "summary_author": "assistant",
+          "human_verified": false,
+          "fulltext_snapshot_sha256": null
+        }
+      ]
+    },
+    {
+      "id": "EXP-B-VISION",
+      "user_question": "我想提出一种图像分类方法：测试时只用无标签目标批次和预训练模型，不使用源训练数据；最小化预测熵，重新估计归一化统计量，只优化逐通道仿射参数。这能否作为一个新的方法贡献？请按提供材料分析，必要时建议修订或放弃。",
+      "resources": {
+        "skills": [
+          "PyTorch",
+          "图像分类"
+        ],
+        "gpu": "单张 24 GiB",
+        "ram_gib": 32,
+        "time_weeks": 6,
+        "data": "公开腐蚀图像基准",
+        "cloud_budget": "无"
+      },
+      "sources": [
+        {
+          "id": "tent",
+          "title": "Tent: Fully Test-time Adaptation by Entropy Minimization",
+          "url": "https://arxiv.org/pdf/2006.10726",
+          "locator": "Sections 2 and 3; PDF pages 2–3",
+          "summary": "Tent 在不访问源训练数据的条件下，以测试预测熵为目标进行适应，估计归一化统计量并更新逐通道仿射参数。",
+          "read_scope": "pdf_text",
+          "checked_on": "2026-10-19",
+          "summary_author": "assistant",
+          "human_verified": false,
+          "fulltext_snapshot_sha256": null
+        },
+        {
+          "id": "ttt",
+          "title": "Test-Time Training with Self-Supervision for Generalization under Distribution Shifts",
+          "url": "https://arxiv.org/abs/1909.13231",
+          "locator": "Abstract",
+          "summary": "研究通过无标签测试样本形成自监督任务，在预测前更新模型参数的办法。",
+          "read_scope": "abstract",
+          "checked_on": "2026-10-19",
+          "summary_author": "assistant",
+          "human_verified": false,
+          "fulltext_snapshot_sha256": null
+        },
+        {
+          "id": "corruptions",
+          "title": "Benchmarking Neural Network Robustness to Common Corruptions and Perturbations",
+          "url": "https://arxiv.org/abs/1903.12261",
+          "locator": "Abstract",
+          "summary": "研究常见腐蚀与扰动下的模型鲁棒性评测，为测试时适应提供相邻评测背景。",
+          "read_scope": "abstract",
+          "checked_on": "2026-10-19",
+          "summary_author": "assistant",
+          "human_verified": false,
+          "fulltext_snapshot_sha256": null
+        }
+      ]
+    },
+    {
+      "id": "EXP-C-GRAPH",
+      "user_question": "我准备在 ogbn-papers100M 上研究节点分类。初始实现计划把所有节点的 128 维特征保存为一个稠密 float32 张量，并一次性放入单张 GPU，全批训练。请判断这一执行方案是否符合我的条件，提出可以先验证的替代步骤。必要时可以改变执行方案，但请说明变化后的成本与结论边界。",
+      "resources": {
+        "skills": [
+          "Python",
+          "PyTorch",
+          "基本图采样"
+        ],
+        "gpu": "单张 24 GiB",
+        "ram_gib": 32,
+        "time_weeks": 4,
+        "data": "公开 OGB 数据；本地可用磁盘 200 GiB",
+        "cloud_budget": "0，不允许远程计算"
+      },
+      "sources": [
+        {
+          "id": "ogb",
+          "title": "Open Graph Benchmark: Datasets for Machine Learning on Graphs",
+          "url": "https://arxiv.org/abs/2005.00687",
+          "locator": "Abstract",
+          "summary": "提出图机器学习基准数据集与评估框架。",
+          "read_scope": "abstract",
+          "checked_on": "2026-10-19",
+          "summary_author": "assistant",
+          "human_verified": false,
+          "fulltext_snapshot_sha256": null
+        },
+        {
+          "id": "ogb_docs",
+          "title": "Open Graph Benchmark Node Property Prediction",
+          "url": "https://ogb.stanford.edu/docs/nodeprop/",
+          "locator": "Summary dataset table; ogbn-arxiv graph description; ogbn-papers100M section",
+          "summary": "ogbn-papers100M 有 111059956 个节点，其特征按 ogbn-arxiv 的方式构造，节点特征为 128 维。",
+          "read_scope": "official_documentation",
+          "checked_on": "2026-10-19",
+          "summary_author": "assistant",
+          "human_verified": false,
+          "fulltext_snapshot_sha256": null
+        },
+        {
+          "id": "graphsage",
+          "title": "Inductive Representation Learning on Large Graphs",
+          "url": "https://arxiv.org/abs/1706.02216",
+          "locator": "Abstract",
+          "summary": "GraphSAGE 通过采样和聚合邻居特征学习归纳式节点表示。",
+          "read_scope": "abstract",
+          "checked_on": "2026-10-19",
+          "summary_author": "assistant",
+          "human_verified": false,
+          "fulltext_snapshot_sha256": null
+        },
+        {
+          "id": "cluster",
+          "title": "Cluster-GCN: An Efficient Algorithm for Training Deep and Large Graph Convolutional Networks",
+          "url": "https://arxiv.org/abs/1905.07953",
+          "locator": "Abstract",
+          "summary": "以图聚类构建训练批次，研究大型图卷积网络的高效训练。",
+          "read_scope": "abstract",
+          "checked_on": "2026-10-19",
+          "summary_author": "assistant",
+          "human_verified": false,
+          "fulltext_snapshot_sha256": null
+        }
+      ]
+    },
+    {
+      "id": "EXP-D-NLP",
+      "user_question": "这些论文对检索与长上下文的价值给出不同侧重点。我想做一个法律文档问答项目，是否可以直接判断长上下文已经让 RAG 没有研究价值？请区分已有证据、尚缺条件和最小比较实验，必要时提出需要补充的信息。",
+      "resources": {
+        "skills": [
+          "Python",
+          "检索系统",
+          "API 调用"
+        ],
+        "gpu": "无专用 GPU",
+        "ram_gib": 16,
+        "time_weeks": 4,
+        "data": "拟使用可公开访问法律文档；语料范围与问答标注尚未确定",
+        "api_budget_cny": 300,
+        "target_model": "尚未确定"
+      },
+      "sources": [
+        {
+          "id": "rag_lc",
+          "title": "Retrieval Augmented Generation or Long-Context LLMs? A Comprehensive Study and Hybrid Approach",
+          "url": "https://aclanthology.org/2024.emnlp-industry.66.pdf",
+          "locator": "Abstract; Introduction",
+          "summary": "在作者评估的设置中，资源充分时长上下文平均表现更好，RAG 保有成本优势；论文还提出 Self-Route。",
+          "read_scope": "pdf_text",
+          "checked_on": "2026-10-19",
+          "summary_author": "assistant",
+          "human_verified": false,
+          "fulltext_snapshot_sha256": null
+        },
+        {
+          "id": "retrieval_lc",
+          "title": "Retrieval meets Long Context Large Language Models",
+          "url": "https://arxiv.org/abs/2310.03025",
+          "locator": "Abstract",
+          "summary": "作者在其研究的模型与任务上报告，检索增强可改善长上下文模型的表现。",
+          "read_scope": "abstract",
+          "checked_on": "2026-10-19",
+          "summary_author": "assistant",
+          "human_verified": false,
+          "fulltext_snapshot_sha256": null
+        },
+        {
+          "id": "lost_middle",
+          "title": "Lost in the Middle: How Language Models Use Long Contexts",
+          "url": "https://arxiv.org/abs/2307.03172",
+          "locator": "Abstract",
+          "summary": "作者研究相关信息在上下文中的位置与模型表现之间的关系，并报告位置变化会影响其所测模型的任务表现。",
+          "read_scope": "abstract",
+          "checked_on": "2026-10-19",
+          "summary_author": "assistant",
+          "human_verified": false,
+          "fulltext_snapshot_sha256": null
+        }
+      ]
+    }
+  ]
+}
