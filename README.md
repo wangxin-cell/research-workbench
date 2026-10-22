@@ -8,9 +8,9 @@ Bring a research idea, a few papers, and your available time, data, and compute.
 
 **Early alpha.** The interface and analysis instructions are currently in Chinese. The scientific usefulness of the generated suggestions has not been established in a user study.
 
-![An example of a PDF excerpt with its page, file fingerprint, and original-file download](docs/pdf-evidence-preview.png)
+![The research workspace with paper materials, resource constraints, and an offline analysis path](docs/workbench-refresh.jpg)
 
-*Actual interface using a synthetic PDF and a manually written report. This illustrates evidence tracing, not model performance.*
+*Actual local interface. The [report example](examples/demo.html) is manually authored and does not demonstrate model performance. [Mobile preview](docs/workbench-mobile.jpg).*
 
 ## Try it without an API key
 
@@ -20,7 +20,7 @@ Requires Python 3.11 or later. Download or clone this repository, open a termina
 python -m research_workbench serve
 ```
 
-Open [the local workbench](http://127.0.0.1:8765). Click **查看报告示例** to inspect the manually authored demonstration. Stop the server with Ctrl+C.
+Open [the local workbench](http://127.0.0.1:8765). Click **报告示例** to inspect the manually authored demonstration. Stop the server with Ctrl+C.
 
 For your own research:
 

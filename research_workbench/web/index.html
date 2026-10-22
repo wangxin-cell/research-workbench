@@ -1,60 +1,84 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>研究选题工作台</title><link rel="stylesheet" href="/styles.css"><script src="/app.js" defer></script></head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#18302d">
+  <title>研究选题工作台 · Research Workbench</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
 <body>
+<a class="skip-link" href="#main-content">跳至主要内容</a>
 <aside class="sidebar">
-  <a class="brand" href="/" aria-label="研究选题工作台首页"><span class="brand-mark">研</span><span>研究选题工作台<small>RESEARCH WORKBENCH</small></span></a>
-  <div class="local-tag"><span></span> 本地工作空间</div>
-  <nav aria-label="工作区导航"><button class="nav-button active" id="nav-work">▤ 编辑研究材料</button><button class="nav-button" id="show-demo">↗ 查看报告示例</button></nav>
-  <div class="sidebar-heading">最近的研究 <button id="refresh-history" class="icon-button" title="刷新记录" aria-label="刷新记录">↻</button></div>
-  <div id="history" class="history"><p class="small">完成一次探索后，记录会显示在这里。</p></div>
-  <div class="sidebar-foot">先理解已有工作，<br>再决定下一步研究什么。<span>本地原型 · v0.1</span></div>
+  <a class="brand" href="/" aria-label="研究选题工作台首页"><span class="brand-mark"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h6a3 3 0 0 1 3 3v14a4 4 0 0 0-4-2H4zM13 7a3 3 0 0 1 3-3h4v15h-3a4 4 0 0 0-4 2"/></svg></span><span>研究选题工作台<small>RESEARCH WORKBENCH</small></span></a>
+  <div class="local-tag"><span></span> 本地工作空间 <small>ALPHA</small></div>
+  <p class="nav-label">工作空间</p>
+  <nav aria-label="工作区导航">
+    <button class="nav-button active" id="nav-work" aria-current="page"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>研究材料</span><span class="nav-marker">01</span></button>
+    <button class="nav-button" id="show-demo"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8zM14 3v5h5M8 12h8M8 16h5"/></svg><span>报告示例</span><svg class="icon nav-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button>
+  </nav>
+  <details class="history-section" open>
+    <summary>最近的研究</summary>
+    <button id="refresh-history" class="icon-button history-refresh" title="刷新记录" aria-label="刷新记录"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2 6M20 4v7h-7"/></svg></button>
+    <div id="history" class="history"><p class="small">完成一次探索后，<br>记录会保存在这里。</p></div>
+  </details>
+  <div class="sidebar-foot"><span class="foot-line"></span><p>好的研究问题，<br>从读懂已有工作开始。</p><span>基于证据 · 保留不确定性</span></div>
 </aside>
-<main>
-  <header class="topbar"><span id="view-label">工作台 / 新的探索</span><div><button id="load-project" class="quiet">导入项目</button><button id="save-project" class="quiet">保存项目</button></div></header>
+<main id="main-content" tabindex="-1">
+  <header class="topbar"><div class="breadcrumb"><span class="workspace-label">WORKSPACE</span><span class="breadcrumb-divider">/</span><span id="view-label">新的探索</span></div><div class="project-actions"><button id="load-project" class="quiet"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V3m-5 5 5-5 5 5M4 14v6h16v-6"/></svg>导入项目</button><button id="save-project" class="quiet save-project"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h12l4 4v14H3V3zM7 3v6h9V3M7 21v-7h10v7"/></svg>保存项目</button></div></header>
   <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
   <section id="workspace" class="workspace">
-    <div class="hero"><div><p class="eyebrow">从论文出发</p><h1>把阅读，推进到一个研究问题。</h1><p>带上你读过的论文和真实条件，一起检查哪些方向值得继续。</p></div><label class="example-label">用一个案例开始<select id="example-picker"><option value="">选择探索案例</option></select></label></div>
+    <div class="hero">
+      <div class="hero-copy"><p class="eyebrow"><span></span> 从文献到问题 / IDEA TO INQUIRY</p><h1>让研究想法，有据可循。</h1><p>整理关键论文，结合真实条件，找到下一步值得验证的问题。</p></div>
+      <div class="example-card"><label for="example-picker">还没有具体方向？</label><select id="example-picker"><option value="">从一个探索案例开始</option></select><span>4 个构造案例 · 仅供探索与演示</span></div>
+    </div>
     <div class="work-grid">
       <div class="primary-column">
-        <section class="panel"><div class="section-heading"><span class="step">01</span><h2>你想研究什么？</h2></div>
-          <label for="question">研究兴趣、已有想法，或正在纠结的问题</label>
-          <textarea id="question" rows="5" placeholder="例如：我读了几篇检索增强生成的论文，想知道在有限算力下，还有哪些值得验证的问题……"></textarea>
-          <p class="help">可以是一个模糊方向，也可以是需要核查的具体创新点。</p>
+        <section class="panel question-panel" aria-labelledby="question-heading">
+          <div class="section-heading"><span class="step">01</span><div><h2 id="question-heading">你想研究什么？</h2><p>一个模糊的兴趣，也可以成为起点。</p></div><span class="section-tag">研究起点</span></div>
+          <label for="question">研究兴趣或待核查的想法</label>
+          <textarea id="question" rows="4" placeholder="例如：在有限算力下，检索增强生成还有哪些值得验证的问题？" aria-describedby="question-help"></textarea>
+          <p id="question-help" class="help">描述你想解决的问题、观察到的现象，或对已有工作的疑问。</p>
         </section>
-        <section class="panel"><div class="section-heading"><span class="step">02</span><h2>论文材料</h2><span id="source-count" class="count">0 条</span></div>
+        <section class="panel materials-panel" aria-labelledby="materials-heading">
+          <div class="section-heading"><span class="step">02</span><div><h2 id="materials-heading">建立你的证据起点</h2><p>加入关键论文，保留每条材料的来源。</p></div><span id="source-count" class="count" role="status" aria-live="polite" aria-atomic="true">0 条材料</span></div>
           <form id="search-form" class="search-row"><label class="sr-only" for="search-query">检索 arXiv 或输入论文链接</label><input id="search-query" placeholder="英文关键词、arXiv 编号或链接" maxlength="300"><button id="search-button" type="submit">检索文献</button></form>
-          <p class="help">检索范围为 arXiv，返回原始摘要。也可以手动添加其他来源。</p>
+          <p class="help">检索 arXiv 原始摘要，或在下方添加其他来源。</p>
           <div id="search-results" aria-live="polite"></div>
-          <div id="sources" class="sources"><div class="empty"><span class="empty-symbol">▤</span><strong>先放入几篇关键论文</strong><p>建议从 3—5 篇开始。每条材料都保留来源和阅读范围。</p></div></div>
-          <div class="material-actions"><button id="add-manual" class="add-button">＋ 手动添加论文</button><button id="add-pdf" class="add-button">＋ 从 PDF 选择证据</button></div>
+          <div id="sources" class="sources"><div class="empty"><span class="empty-symbol" aria-hidden="true"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8zM14 3v5h5M8 12h8M8 16h5"/></svg></span><strong>把读过的论文，放到一起。</strong><p>从 3—5 篇关键论文开始，逐步勾勒研究边界。</p></div></div>
+          <div class="material-actions"><button id="add-manual" class="add-button"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>手动添加论文</button><button id="add-pdf" class="add-button"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8zM14 3v5h5M8 12h8M8 16h5"/></svg>从 PDF 选择证据</button></div>
           <p id="pdf-help" class="help">PDF 在本机提取，只将你选中的片段加入分析。</p>
         </section>
       </div>
       <aside class="conditions">
-        <section class="panel"><div class="section-heading"><span class="step">03</span><h2>你的研究条件</h2></div>
+        <section class="panel" aria-labelledby="conditions-heading">
+          <div class="section-heading"><span class="step">03</span><div><h2 id="conditions-heading">让想法落在现实里</h2><p>研究条件决定可行的第一步。</p></div></div>
           <label for="skills">已有技能</label><input id="skills" placeholder="Python，PyTorch，信息检索">
-          <div class="field-pair"><div><label for="weeks">可投入时间 / 周</label><input id="weeks" type="number" min="1" max="104" placeholder="8"></div><div><label for="ram">内存 / GiB</label><input id="ram" type="number" min="1" placeholder="32"></div></div>
+          <div class="field-pair"><div><label for="weeks">可投入时间 <span>/ 周</span></label><input id="weeks" type="number" min="1" max="104" placeholder="8"></div><div><label for="ram">内存 <span>/ GiB</span></label><input id="ram" type="number" min="1" placeholder="32"></div></div>
           <label for="gpu">可用算力</label><input id="gpu" placeholder="例如：单张 24 GiB 显卡">
           <label for="data">可用数据</label><textarea id="data" rows="2" placeholder="公开数据集、已有数据，或尚未确定"></textarea>
           <label for="budget">计算与云服务预算</label><input id="budget" placeholder="例如：不使用付费云计算">
-          <details><summary>补充条件</summary><label for="api-budget">研究所需 API 预算 / 元</label><input id="api-budget" type="number" min="0" placeholder="可留空"><label for="target-model">研究对象模型</label><input id="target-model" placeholder="尚未确定"><label for="notes">其他限制或偏好</label><textarea id="notes" rows="2"></textarea></details>
+          <details class="extra-conditions"><summary>补充条件 <span>选填</span></summary><label for="api-budget">研究所需 API 预算 / 元</label><input id="api-budget" type="number" min="0" placeholder="可留空"><label for="target-model">研究对象模型</label><input id="target-model" placeholder="尚未确定"><label for="notes">其他限制或偏好</label><textarea id="notes" rows="2"></textarea></details>
         </section>
-        <section class="outcome-note"><span>这次探索会得到什么</span><ul><li>少量具体的候选问题</li><li>与已有工作的重合和差异</li><li>第一步验证及停止条件</li></ul><p>证据不足时，也可以得到一个有依据的“暂时不要做”。</p></section>
+        <section class="outcome-note"><p class="note-eyebrow">探索的终点，是一个可验证的起点</p><h2>你会带走什么？</h2><ul><li>少量具体的候选研究问题</li><li>与已有工作的重合与差异</li><li>第一步验证和停止条件</li></ul><p>证据不足时，一个有依据的“暂时不要做”，同样有价值。</p></section>
       </aside>
     </div>
-    <section class="action-panel"><div class="model-settings"><label for="model">分析模型</label><input id="model" placeholder="填写已开通的模型名称"><label for="workflow">分析方式</label><select id="workflow"><option value="reviewed">草案后复核 · 最多两次调用</option><option value="baseline">单轮分析 · 一次调用</option></select></div>
-      <p id="connection" class="help">正在检查本地配置…</p>
-      <div class="action-row"><p>候选贡献需要进一步核查，<br>检索结果不会自动证明创新。</p><button id="prepare" class="secondary">导出分析提示</button><button id="analyze" class="primary">生成选题分析 <span>→</span></button></div>
-      <div id="prepared-actions" class="prepared-actions" hidden><span>研究材料快照已保存。</span><a id="download-prompt" href="#" download>下载提示文件</a><button id="import-answer" class="quiet">导入模型回答</button></div>
+    <section class="action-panel" aria-labelledby="analysis-heading">
+      <div class="analysis-heading"><div><p class="eyebrow">下一步</p><h2 id="analysis-heading">把材料，转化为研究判断。</h2></div><span class="analysis-badge" id="analysis-mode">正在检查配置</span></div>
+      <p id="connection" class="help connection">正在检查本地配置…</p>
+      <details id="model-settings-panel" class="model-details"><summary>直接调用模型 <span>模型与分析方式</span></summary><div class="model-settings"><div><label for="model">分析模型</label><input id="model" placeholder="填写已开通的模型名称"></div><div><label for="workflow">分析方式</label><select id="workflow"><option value="reviewed">草案后复核 · 最多两次调用</option><option value="baseline">单轮分析 · 一次调用</option></select></div></div></details>
+      <div class="action-row"><p>候选贡献仍需核查，<br>检索结果不会自动证明创新。</p><button id="prepare" class="primary">导出分析提示 <svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button><button id="analyze" class="secondary" disabled>生成选题分析 →</button></div>
+      <div id="prepared-actions" class="prepared-actions" hidden><div><strong>材料快照已保存</strong><span>下载提示 → 在你使用的模型中分析 → 导入回答</span></div><a id="download-prompt" class="download-link" href="#" download>下载提示文件</a><button id="import-answer" class="secondary">导入模型回答</button></div>
     </section>
+    <footer class="workspace-foot"><span>RESEARCH WORKBENCH</span>让每一个研究判断，都能回到证据。</footer>
   </section>
   <section id="result-view" class="result-view" hidden><div class="result-toolbar"><button id="back-to-work" class="quiet">← 返回研究材料</button><span id="result-label"></span><a id="download-report" class="quiet" hidden download>下载报告 JSON</a><a id="open-report" class="quiet" target="_blank" rel="noopener">独立打开 ↗</a></div><iframe id="report-frame" title="研究选题分析报告" sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-downloads"></iframe></section>
 </main>
-<dialog id="paper-dialog"><form id="paper-form"><div class="dialog-top"><h2>添加论文材料</h2><button id="close-paper" type="button" class="icon-button" aria-label="关闭">×</button></div><label for="paper-title">论文标题</label><input id="paper-title" required maxlength="500"><label for="paper-url">来源链接</label><input id="paper-url" type="url" placeholder="https://…" required><label for="paper-scope">提供内容</label><select id="paper-scope"><option value="abstract">原始摘要</option><option value="notes">你整理的阅读笔记</option></select><label for="paper-text">摘要或笔记</label><textarea id="paper-text" rows="7" required maxlength="30000"></textarea><label for="paper-locator">原文位置</label><input id="paper-locator" placeholder="例如：Abstract，或第 3 节第 2 段" required><div class="dialog-actions"><button class="primary" type="submit">添加到材料</button></div></form></dialog>
-<dialog id="answer-dialog"><form id="answer-form"><div class="dialog-top"><h2>导入模型回答</h2><button id="close-answer" type="button" class="icon-button" aria-label="关闭">×</button></div><p class="help">回答将关联到已导出的研究材料快照。</p><label for="answer-model">实际使用的模型或来源</label><input id="answer-model" required placeholder="例如：模型名称；人工编写请注明"><label for="answer-text">模型输出的 JSON</label><textarea id="answer-text" rows="10" required placeholder="粘贴完整 JSON 对象"></textarea><div class="dialog-actions"><button class="primary" type="submit">导入并查看报告</button></div></form></dialog>
-<dialog id="pdf-dialog">
-  <div class="dialog-top"><h2>从 PDF 选择证据</h2><button id="close-pdf" type="button" class="icon-button" aria-label="关闭 PDF 选择">×</button></div>
+<dialog id="paper-dialog" aria-labelledby="paper-dialog-title"><form id="paper-form"><div class="dialog-top"><h2 id="paper-dialog-title">添加论文材料</h2><button id="close-paper" type="button" class="icon-button" aria-label="关闭"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div><p id="paper-error" class="dialog-error" role="alert" hidden></p><label for="paper-title">论文标题</label><input id="paper-title" required maxlength="500"><label for="paper-url">来源链接</label><input id="paper-url" type="url" placeholder="https://…" required><label for="paper-scope">提供内容</label><select id="paper-scope"><option value="abstract">原始摘要</option><option value="notes">你整理的阅读笔记</option></select><label for="paper-text">摘要或笔记</label><textarea id="paper-text" rows="7" required maxlength="30000"></textarea><label for="paper-locator">原文位置</label><input id="paper-locator" placeholder="例如：Abstract，或第 3 节第 2 段" required><div class="dialog-actions"><button class="primary" type="submit">添加到材料</button></div></form></dialog>
+<dialog id="answer-dialog" aria-labelledby="answer-dialog-title"><form id="answer-form"><div class="dialog-top"><h2 id="answer-dialog-title">导入模型回答</h2><button id="close-answer" type="button" class="icon-button" aria-label="关闭"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div><p class="help">回答将关联到已导出的研究材料快照。</p><p id="answer-error" class="dialog-error" role="alert" hidden></p><label for="answer-model">实际使用的模型或来源</label><input id="answer-model" required placeholder="例如：模型名称；人工编写请注明"><label for="answer-text">模型输出的 JSON</label><textarea id="answer-text" rows="10" required placeholder="粘贴完整 JSON 对象"></textarea><div class="dialog-actions"><button class="primary" type="submit">导入并查看报告</button></div></form></dialog>
+<dialog id="pdf-dialog" aria-labelledby="pdf-dialog-title">
+  <div class="dialog-top"><h2 id="pdf-dialog-title">从 PDF 选择证据</h2><button id="close-pdf" type="button" class="icon-button" aria-label="关闭 PDF 选择"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
   <p class="help">选择论文文件，再选中与研究问题相关的一段文字。原文件和提取结果保存在本机；分析只使用选中的片段。</p>
   <label for="pdf-file">论文 PDF · 最大 8 MB / 80 页</label><input id="pdf-file" type="file" accept=".pdf,application/pdf">
   <p id="pdf-status" class="help" role="status" aria-live="polite"></p>
