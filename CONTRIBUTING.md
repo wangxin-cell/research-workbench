@@ -6,6 +6,8 @@ Issues and pull requests may be written in English or Chinese.
 
 ## Report a problem
 
+For your first attempt, use the first-try template to tell us where you reached and one concrete obstacle or useful moment. A generated report is not required. The [first-session guide](docs/first-try.md) describes a short trial and how to keep usability feedback separate from research-quality claims.
+
 Use the bug-report template for software failures. Include the command or UI step, expected behavior, observed behavior, Python version, operating system, and a minimal input when possible.
 
 Use the research-feedback template for an unsupported claim, missed related work, bad resource estimate, or impractical experiment. Identify the report statement and the material that supports or contradicts it. A report that recommends stopping can be useful; a confident but unsupported idea is a failure.

@@ -1,0 +1,57 @@
+name: First try / 首次试用
+description: Tell us where you reached or got stuck, even without a report.
+title: "[First try] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        You can stop at any step and still give useful feedback. No report is required.
+        没有生成报告也可以反馈。请只分享可公开的简短描述，不要提交密钥、私人运行目录或未公开研究。
+  - type: dropdown
+    id: starting_point
+    attributes:
+      label: Starting point / 试用起点
+      options:
+        - "A real question and papers I know / 有真实问题和熟悉的论文"
+        - "An interest, no papers yet / 有兴趣方向，还没读论文"
+        - "Only exploring the included demo / 仅查看内置演示"
+    validations:
+      required: true
+  - type: dropdown
+    id: reached
+    attributes:
+      label: Furthest step reached / 最后做到哪一步
+      options:
+        - "Read the README / 阅读项目说明"
+        - "Downloaded the code / 下载代码"
+        - "Opened the workspace / 启动工作台"
+        - "Viewed the included demo report / 查看内置演示报告"
+        - "Added research materials / 加入研究材料"
+        - "Exported a prompt / 导出提示"
+        - "Received a model answer / 获得模型回答"
+        - "Viewed a report based on my materials / 查看自己材料对应的报告"
+        - "Checked evidence and chose a next step / 核查依据并决定下一步"
+    validations:
+      required: true
+  - type: textarea
+    id: observation
+    attributes:
+      label: What happened / 最具体的一处体验
+      description: What helped, confused you, or stopped you? Include the action and result, or a short error with private information removed. 哪一步有帮助、看不懂或卡住了？
+    validations:
+      required: true
+  - type: textarea
+    id: next_step
+    attributes:
+      label: Effect on your next step / 对下一步的影响（选填）
+      description: If you have a report, identify one suggestion and explain what you plan to do. No change or no help is useful feedback too. This does not require claiming novelty.
+  - type: input
+    id: elapsed_help
+    attributes:
+      label: Time and assistance / 用时与帮助（选填）
+      placeholder: "例如：约 18 分钟，其中模型等待 5 分钟；启动时求助一次。"
+  - type: textarea
+    id: setup
+    attributes:
+      label: Setup / 环境与分析方式（选填）
+      description: OS, Python version, project commit, model if used, and abstract/notes/PDF reading scope. Unknown is fine; never include API keys.

@@ -71,6 +71,8 @@ The four supplied cases are public development examples, not held-out tests. The
 
 ## Help test real usefulness
 
+Try the [first-session guide / 首次试用指南](docs/first-try.md), then tell us your starting point, where you reached, and one concrete helpful or confusing moment in the [first-try feedback form](https://github.com/wangxin-cell/research-workbench/issues/new?template=first_try.yml). You can report a blocked attempt without generating a report. The guide separates researchers bringing papers from users exploring their first reading materials.
+
 Useful feedback identifies a concrete unsupported claim, missed prior work, infeasible experiment, or research decision that changed after using the report. Use the research-feedback issue template with material you can share publicly.
 
 Contributions to reproducible bug fixes, research cases, literature coverage, and language support are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before adding a case or running comparisons.
