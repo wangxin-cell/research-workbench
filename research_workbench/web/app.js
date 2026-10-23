@@ -10,6 +10,19 @@ function notice(message, error = false) {
   $("notice").classList.toggle("error", error);
   $("notice").hidden = !message;
 }
+function dialogError(id, message = "") {
+  if (message && !$(id).closest("dialog").open) { notice(message, true); return; }
+  $(id).textContent = message;
+  $(id).hidden = !message;
+  if (message) $(id).scrollIntoView({ block: "nearest" });
+}
+function selectView(view) {
+  for (const [id, selected] of [["nav-work", view === "work"], ["show-demo", view === "demo"]]) {
+    $(id).classList.toggle("active", selected);
+    if (selected) $(id).setAttribute("aria-current", "page");
+    else $(id).removeAttribute("aria-current");
+  }
+}
 function node(tag, content, className) {
   const result = document.createElement(tag);
   if (content !== undefined) result.textContent = content;
@@ -88,12 +101,14 @@ function fillCase(value) {
 }
 function showWork() {
   $("workspace").hidden = false; $("result-view").hidden = true;
-  $("view-label").textContent = "工作台 / 研究材料";
+  $("view-label").textContent = "研究材料";
+  selectView("work");
   window.scrollTo(0, 0);
 }
 function showReport(runId = null) {
   $("workspace").hidden = true; $("result-view").hidden = false;
-  $("view-label").textContent = runId ? "工作台 / 选题分析" : "工作台 / 人工编写的示例";
+  $("view-label").textContent = runId ? "选题分析" : "报告示例";
+  selectView(runId ? "report" : "demo");
   const url = runId ? "/reports/" + encodeURIComponent(runId) : "/demo";
   $("report-frame").src = url; $("open-report").href = url;
   $("result-label").textContent = runId ? "结论仍需核查原文与研究者判断" : "人工编写的展示案例，不代表模型效果";
@@ -106,11 +121,14 @@ function renderSources() {
     const added = state.sources.some(s => s.id === button.dataset.sourceId || (s.url === button.dataset.sourceUrl && s.read_scope !== "pdf_excerpt"));
     button.disabled = added; button.textContent = added ? "已添加" : "＋ 添加";
   }
-  $("source-count").textContent = state.sources.length + " 条";
+  $("source-count").textContent = state.sources.length + " 条材料";
   const host = $("sources"); host.replaceChildren();
   if (!state.sources.length) {
     const empty = node("div", undefined, "empty");
-    empty.append(node("span", "▤", "empty-symbol"), node("strong", "先放入几篇关键论文"), node("p", "建议从 3—5 篇开始。每条材料都保留来源和阅读范围。"));
+    const symbol = node("span", undefined, "empty-symbol");
+    symbol.setAttribute("aria-hidden", "true");
+    symbol.append($("add-pdf").querySelector("svg").cloneNode(true));
+    empty.append(symbol, node("strong", "把读过的论文，放到一起。"), node("p", "从 3—5 篇关键论文开始，逐步勾勒研究边界。"));
     host.append(empty); return;
   }
   state.sources.forEach((source, index) => {
@@ -119,6 +137,7 @@ function renderSources() {
     const details = node("details"); details.append(node("summary", "查看材料内容"), node("p", source.summary, "abstract"));
     const actions = node("div", undefined, "source-actions");
     const remove = node("button", "移除"); remove.type = "button";
+    remove.setAttribute("aria-label", "移除材料：" + source.title);
     remove.addEventListener("click", () => { state.sources.splice(index, 1); dirty(); renderSources(); });
     const original = source.summary_author === "arxiv_original_abstract" || source.summary_author === "user_provided_abstract";
     const isExcerpt = source.read_scope === "pdf_excerpt";
@@ -183,7 +202,7 @@ $("search-form").addEventListener("submit", async event => {
   } catch (error) { notice(error.message, true); }
   finally { $("search-button").disabled = false; $("search-button").textContent = "检索文献"; }
 });
-$("add-manual").addEventListener("click", () => $("paper-dialog").showModal());
+$("add-manual").addEventListener("click", () => { dialogError("paper-error"); $("paper-dialog").showModal(); });
 $("close-paper").addEventListener("click", () => $("paper-dialog").close());
 $("paper-form").addEventListener("submit", event => {
   event.preventDefault();
@@ -198,7 +217,7 @@ $("paper-form").addEventListener("submit", event => {
       summary_author: abstract ? "user_provided_abstract" : "user_notes", human_verified: false,
       checked_on: new Date().toISOString().slice(0, 10), fulltext_snapshot_sha256: null });
     dirty(); renderSources(); $("paper-dialog").close(); $("paper-form").reset(); notice("论文材料已添加。");
-  } catch (error) { notice(error.message, true); }
+  } catch (error) { dialogError("paper-error", error.message); }
 });
 function pdfSelection() {
   const area = $("pdf-page-text");
@@ -279,7 +298,7 @@ $("prepare").addEventListener("click", async () => {
   } catch (error) { notice(error.message, true); }
   finally { $("prepare").disabled = state.busy; }
 });
-$("import-answer").addEventListener("click", () => $("answer-dialog").showModal());
+$("import-answer").addEventListener("click", () => { dialogError("answer-error"); $("answer-dialog").showModal(); });
 $("close-answer").addEventListener("click", () => $("answer-dialog").close());
 $("answer-form").addEventListener("submit", async event => {
   event.preventDefault();
@@ -289,7 +308,7 @@ $("answer-form").addEventListener("submit", async event => {
     const result = await api("/api/import", { run_id: state.prepared, report: JSON.parse($("answer-text").value), model_label: $("answer-model").value.trim() });
     $("answer-dialog").close(); $("answer-form").reset(); state.prepared = null;
     $("prepared-actions").hidden = true; showReport(result.run_id); await history(); notice("回答已导入。引用 ID 已检查，论断是否成立仍需核查原文。");
-  } catch (error) { notice(error instanceof SyntaxError ? "回答不是有效 JSON，请粘贴完整对象，不要包含代码围栏。" : error.message, true); }
+  } catch (error) { dialogError("answer-error", error instanceof SyntaxError ? "回答不是有效 JSON，请粘贴完整对象，不要包含代码围栏。" : error.message); }
   finally { submit.disabled = false; }
 });
 $("analyze").addEventListener("click", async () => {
@@ -338,13 +357,21 @@ async function init() {
   try {
     const [config, examples] = await Promise.all([api("/api/config"), api("/api/examples")]);
     state.configured = config.api_key_configured; $("model").value = config.default_model; setBusy(false);
+    $("analysis-mode").textContent = state.configured ? "模型密钥已配置" : "可使用自己的模型";
+    $("model-settings-panel").open = state.configured;
+    $("analyze").classList.toggle("primary", state.configured);
+    $("analyze").classList.toggle("secondary", !state.configured);
+    $("prepare").classList.toggle("primary", !state.configured);
+    $("prepare").classList.toggle("secondary", state.configured);
     $("add-pdf").disabled = !config.pdf_available;
     if (!config.pdf_available) $("pdf-help").textContent = 'PDF 功能尚未安装。请在项目目录执行 python -m pip install ".[pdf]"，然后重启工作台。摘要和笔记仍可使用。';
-    $("connection").textContent = state.configured ? "本机已配置模型密钥。点击生成会将当前材料发送到 OpenAI 并产生 API 费用。" : "本机尚未配置模型密钥。可先导出提示，在你使用的模型中分析，再导入回答；直接生成需在启动服务前设置 OPENAI_API_KEY。";
+    $("connection").textContent = state.configured ? "本机已配置模型密钥。点击生成会将当前材料发送到 OpenAI 并产生 API 费用。" : "无需在这里配置密钥：导出提示，在你使用的模型中分析，再导入回答。直接生成需在启动服务前设置 OPENAI_API_KEY。";
     state.examples = examples.cases;
     const names = { "EXP-A-GRAPH": "图学习 · 从论文收敛问题", "EXP-B-VISION": "视觉 · 检查想法是否重复", "EXP-C-GRAPH": "大图 · 检查资源是否可行", "EXP-D-NLP": "检索 · 理解不同研究结论" };
     for (const c of state.examples) { const option = node("option", names[c.id] || c.id); option.value = c.id; $("example-picker").append(option); }
     await history();
   } catch (error) { setBusy(false); notice(error.message, true); }
 }
+// Keep research history reachable on phones without filling the first screen.
+if (window.matchMedia("(max-width: 760px)").matches) document.querySelector(".history-section").open = false;
 init();
