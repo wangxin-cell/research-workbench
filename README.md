@@ -14,11 +14,15 @@ Bring a research idea, a few papers, and your available time, data, and compute.
 
 ## Try it without an API key
 
-Requires Python 3.11 or later. Download or clone this repository, open a terminal in its directory, and run:
+Requires Python 3.11 or later. Clone and start the workbench:
 
 ```sh
+git clone https://github.com/wangxin-cell/research-workbench.git
+cd research-workbench
 python -m research_workbench serve
 ```
+
+You can also [download the source ZIP](https://github.com/wangxin-cell/research-workbench/archive/refs/heads/main.zip). Extract it, open a terminal in the folder containing `pyproject.toml`, and run `python -m research_workbench serve`. The basic workspace requires no package installation.
 
 Open [the local workbench](http://127.0.0.1:8765). Click **报告示例** to inspect the manually authored demonstration. Stop the server with Ctrl+C.
 
@@ -76,6 +80,6 @@ python -m pip install ".[pdf]"
 python -m unittest discover -s tests -v
 ```
 
-Tests use synthetic PDFs, mocked model responses, and synthetic review judgments. They check software behavior, not research quality. The repository includes a GitHub Actions workflow; hosted results are available only after a repository run.
+Tests use synthetic PDFs, mocked model responses, and synthetic review judgments. They check software behavior, not research quality. [GitHub Actions](https://github.com/wangxin-cell/research-workbench/actions/workflows/ci.yml) runs the tests and installed-package checks on Windows and Ubuntu with Python 3.11 and 3.13.
 
 Licensed under [MIT](LICENSE).

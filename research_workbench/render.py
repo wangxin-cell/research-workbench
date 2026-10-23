@@ -147,6 +147,8 @@ def report_body(case, report, label="选题分析", evidence_base=None):
     for source in case["sources"]:
         href = source["url"] if safe_url(source["url"]) else "#"
         material = "原始摘要" if source.get("summary_author") in {"arxiv_original_abstract", "user_provided_abstract"} else "摘要转述或阅读笔记"
+        if source.get("summary_author") == "assistant_curated_abstract":
+            material = "助手整理的入门摘要转述（不代表用户已阅读或人工核验）"
         evidence = source.get("evidence")
         if evidence:
             material = "PDF 提取片段（未核对版面与含义，不代表已读全文）"
