@@ -1,0 +1,58 @@
+{
+  "id": "deep-rl-starter",
+  "title": "强化学习：先读懂，再做一次可解释的实验",
+  "description": "还没有读过论文也可以从这里开始：先理解强化学习的基本概念，再依次认识一个算法、复现的难点和结果评估的方法。",
+  "scope_note": "这是选取 2017–2021 年论文组成的经典入门阅读包，不是最新综述、前沿检索或创新证明。三条论文材料均为助手根据官方摘要整理的中文转述（Abstract only），不是原始摘要、全文阅读记录或用户笔记；加入材料不表示你已读过或经过人工核验。先理解与复现，再结合真实条件提出待验证的问题。",
+  "primer": {
+    "title": "Spinning Up：Part 1 — Key Concepts in RL",
+    "url": "https://spinningup.openai.com/en/latest/spinningup/rl_intro.html",
+    "read_first": "先读智能体与环境的交互、状态与观测、动作、策略，以及 reward 与 return。试着用自己的话描述一次交互中谁观察、谁行动、谁给奖励；暂不理解代码也可以继续读概念。"
+  },
+  "papers": [
+    {
+      "source": {
+        "id": "arxiv-1707.06347v2",
+        "title": "Proximal Policy Optimization Algorithms",
+        "url": "https://arxiv.org/abs/1707.06347v2",
+        "locator": "Abstract only · arXiv:1707.06347v2",
+        "summary": "PPO 是一类策略梯度方法，交替从环境交互中采样数据，再用随机梯度上升优化替代目标；其目标允许对采样数据进行多轮小批量更新。作者在模拟机器人运动和 Atari 等基准上报告了效果，并讨论样本复杂度、实现简洁性与运行时间之间的取舍。本条仅转述摘要，不包含算法细节或复现配置。",
+        "read_scope": "abstract_only",
+        "checked_on": "2026-10-23",
+        "summary_author": "assistant_curated_abstract",
+        "human_verified": false
+      },
+      "read_first": "先看摘要，区分“采集环境交互数据”和“用数据更新策略”这两个步骤。遇到不懂的术语，回到前面的概念引导；实现细节需继续查原文。",
+      "reflection": "你能分别说出采样和更新在做什么吗？如果要复现一次训练，还缺哪些环境、实现与实验配置？"
+    },
+    {
+      "source": {
+        "id": "arxiv-1709.06560v3",
+        "title": "Deep Reinforcement Learning that Matters",
+        "url": "https://arxiv.org/abs/1709.06560v3",
+        "locator": "Abstract only · arXiv:1709.06560v3",
+        "summary": "论文指出，基准环境中的非确定性和方法本身的变化会让深度强化学习结果难以复现和解释；缺少显著性度量及更规范的实验报告时，很难判断性能改进是否有意义。作者研究复现、实验方法和报告流程的挑战，展示常见基线比较中的结果差异，并提出改进建议。本条未提供这些建议的完整细节。",
+        "read_scope": "abstract_only",
+        "checked_on": "2026-10-23",
+        "summary_author": "assistant_curated_abstract",
+        "human_verified": false
+      },
+      "read_first": "先读摘要中“为什么相同方法会出现不同结果”的部分，区分跑通一次和得到可信比较。具体实验与报告建议仍需查阅正文。",
+      "reflection": "如果一次实验得分更高，你还需要记录或重复什么，才能判断它是稳定改进还是运行波动？"
+    },
+    {
+      "source": {
+        "id": "arxiv-2108.13264v4",
+        "title": "Deep Reinforcement Learning at the Edge of the Statistical Precipice",
+        "url": "https://arxiv.org/abs/2108.13264v4",
+        "locator": "Abstract only · arXiv:2108.13264v4",
+        "summary": "论文讨论只做少量训练运行时，跨任务均值或中位数等性能点估计可能掩盖统计不确定性。作者通过 Atari 100k 等基准分析说明，更完整的统计分析可能改变算法比较结论，并倡导区间估计、四分位均值等统计工具，提供 rliable 库。本条只概述摘要，不提供这些统计方法的使用条件或计算步骤。",
+        "read_scope": "abstract_only",
+        "checked_on": "2026-10-23",
+        "summary_author": "assistant_curated_abstract",
+        "human_verified": false
+      },
+      "read_first": "先读摘要，辨认“一个汇总分数”和“这个分数的不确定性”有什么区别。先理解作者为什么提出这个问题，再到正文核查方法及适用条件。",
+      "reflection": "当可负担的重复运行次数有限时，你准备怎样呈现结果的不确定性？哪些结论应暂时保留，而不能只凭一个得分决定？"
+    }
+  ]
+}

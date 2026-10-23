@@ -43,10 +43,15 @@
         </section>
         <section class="panel materials-panel" aria-labelledby="materials-heading">
           <div class="section-heading"><span class="step">02</span><div><h2 id="materials-heading">建立你的证据起点</h2><p>加入关键论文，保留每条材料的来源。</p></div><span id="source-count" class="count" role="status" aria-live="polite" aria-atomic="true">0 条材料</span></div>
+          <details id="starter-path" class="starter-path">
+            <summary><span>还没读过论文？从这里开始</span><small>深度强化学习 · 入门试点</small></summary>
+            <div id="starter-content"><p class="help">正在载入阅读路径…</p></div>
+            <p id="starter-status" class="help" role="status" aria-live="polite"></p>
+          </details>
           <form id="search-form" class="search-row"><label class="sr-only" for="search-query">检索 arXiv 或输入论文链接</label><input id="search-query" placeholder="英文关键词、arXiv 编号或链接" maxlength="300"><button id="search-button" type="submit">检索文献</button></form>
           <p class="help">检索 arXiv 原始摘要，或在下方添加其他来源。</p>
           <div id="search-results" aria-live="polite"></div>
-          <div id="sources" class="sources"><div class="empty"><span class="empty-symbol" aria-hidden="true"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8zM14 3v5h5M8 12h8M8 16h5"/></svg></span><strong>把读过的论文，放到一起。</strong><p>从 3—5 篇关键论文开始，逐步勾勒研究边界。</p></div></div>
+          <div id="sources" class="sources"><div class="empty"><span class="empty-symbol" aria-hidden="true"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8zM14 3v5h5M8 12h8M8 16h5"/></svg></span><strong>从一篇相关论文开始。</strong><p>加入摘要或阅读笔记，再逐步补充支持与反对的证据。</p></div></div>
           <div class="material-actions"><button id="add-manual" class="add-button"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>手动添加论文</button><button id="add-pdf" class="add-button"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8zM14 3v5h5M8 12h8M8 16h5"/></svg>从 PDF 选择证据</button></div>
           <p id="pdf-help" class="help">PDF 在本机提取，只将你选中的片段加入分析。</p>
         </section>

@@ -9,7 +9,7 @@ import urllib.error
 import urllib.request
 from http.server import ThreadingHTTPServer
 
-from research_workbench.core import ValidationError, read_json
+from research_workbench.core import ValidationError, read_json, validate_case
 from research_workbench.retrieval import (ArxivSearch, RetrievalError, arxiv_identifier,
                                           parse_feed, query_parameters)
 from research_workbench.server import Application, make_handler
@@ -99,6 +99,56 @@ class WebTests(unittest.TestCase):
         with self.assertRaises(urllib.error.HTTPError) as exc:
             self.request("/../evaluator.json")
         self.assertEqual(exc.exception.code, 404)
+
+    def test_rl_starter_is_separate_offline_reading_material(self):
+        with patch.object(self.app.search, "search", side_effect=AssertionError("Starter must work offline")):
+            status, headers, body = self.request("/api/rl-starter")
+        self.assertEqual(status, 200)
+        self.assertIn("application/json", headers["Content-Type"])
+        starter = json.loads(body)
+        self.assertEqual(starter["id"], "deep-rl-starter")
+        self.assertNotIn("user_question", starter)
+        self.assertNotIn("resources", starter)
+        self.assertEqual(starter["primer"]["url"],
+                         "https://spinningup.openai.com/en/latest/spinningup/rl_intro.html")
+        papers = starter["papers"]
+        self.assertEqual([p["source"]["url"] for p in papers], [
+            "https://arxiv.org/abs/1707.06347v2",
+            "https://arxiv.org/abs/1709.06560v3",
+            "https://arxiv.org/abs/2108.13264v4"])
+        for paper in papers:
+            self.assertTrue(paper["read_first"].strip())
+            self.assertTrue(paper["reflection"].strip())
+            source = paper["source"]
+            self.assertEqual(source["read_scope"], "abstract_only")
+            self.assertIn("Abstract only", source["locator"])
+            self.assertEqual(source["summary_author"], "assistant_curated_abstract")
+            self.assertFalse(source["human_verified"])
+        material = {"id": "user-rl-interest", "user_question": "我想先理解强化学习，再决定要验证什么。",
+                    "resources": {}, "sources": [paper["source"] for paper in papers]}
+        self.assertEqual(validate_case(material), material)
+        _, _, examples = self.request("/api/examples")
+        self.assertEqual([item["id"] for item in json.loads(examples)["cases"]],
+                         ["EXP-A-GRAPH", "EXP-B-VISION", "EXP-C-GRAPH", "EXP-D-NLP"])
+        self.assertEqual(self.app.jobs, {})
+        self.assertEqual(list(self.app.runs_root.iterdir()), [])
+
+    def test_starter_prepare_preserves_user_input_and_abstract_provenance(self):
+        _, _, body = self.request("/api/rl-starter")
+        starter = json.loads(body)
+        material = {"id": "user-rl-draft", "user_question": "我还没读过论文，想了解强化学习结果如何比较。",
+                    "resources": {"notes": "尚未确定可用设备和工期"},
+                    "sources": [starter["papers"][0]["source"]]}
+        _, _, response = self.request("/api/prepare", {"case": material})
+        path = self.app.run_path(json.loads(response)["run_id"])
+        self.assertEqual(read_json(path / "input.json"), material)
+        model_input = json.loads(read_json(path / "request.json")["input"])["research_material"]
+        self.assertEqual(model_input, {k: v for k, v in material.items() if k != "id"})
+        self.assertEqual(model_input["sources"][0]["summary_author"], "assistant_curated_abstract")
+        self.assertFalse(model_input["sources"][0]["human_verified"])
+        self.assertNotIn("read_first", model_input["sources"][0])
+        self.assertFalse(read_json(path / "manifest.json")["quality_evaluated"])
+        self.assertEqual(self.app.jobs, {})
 
     def test_host_origin_and_json_guards(self):
         for headers in ({"Host": "untrusted.example"}, {"Origin": "https://untrusted.example"}, {"X-Workbench-Request": ""}, {"Content-Type": "text/plain"}):

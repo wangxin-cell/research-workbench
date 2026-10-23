@@ -14,11 +14,15 @@ Bring a research idea, a few papers, and your available time, data, and compute.
 
 ## Try it without an API key
 
-Requires Python 3.11 or later. Download or clone this repository, open a terminal in its directory, and run:
+Requires Python 3.11 or later. Clone and start the workbench:
 
 ```sh
+git clone https://github.com/wangxin-cell/research-workbench.git
+cd research-workbench
 python -m research_workbench serve
 ```
+
+You can also [download the source ZIP](https://github.com/wangxin-cell/research-workbench/archive/refs/heads/main.zip). Extract it, open a terminal in the folder containing `pyproject.toml`, and run `python -m research_workbench serve`. The basic workspace requires no package installation.
 
 Open [the local workbench](http://127.0.0.1:8765). Click **报告示例** to inspect the manually authored demonstration. Stop the server with Ctrl+C.
 
@@ -29,6 +33,8 @@ For your own research:
 3. Choose **导出分析提示**, use the prompt with your preferred model, and paste its JSON response into **导入模型回答**.
 
 The prompt includes the required output format. Direct generation through the OpenAI API is optional; setup, usage, and costs are explained in the [guide](docs/guide.md).
+
+**Interested in deep reinforcement learning but haven't read papers yet?** Open **还没读过论文？从这里开始** in the materials panel. This pilot reading path starts with basic concepts, then introduces PPO and two papers on reliable evaluation. Each paper has a reading focus and a reflection question. Add an abstract paraphrase individually without replacing your question, constraints, or existing materials. These are assistant-written summaries of abstracts, not records of your reading, a survey of current research, or evidence of novelty. Start by understanding one paper and forming a replication or measurement question; add full-text evidence and recent work before judging contributions. The reading path is separate from the four development cases.
 
 To enable local PDF extraction, install the extra in the same Python environment and restart:
 
@@ -74,6 +80,6 @@ python -m pip install ".[pdf]"
 python -m unittest discover -s tests -v
 ```
 
-Tests use synthetic PDFs, mocked model responses, and synthetic review judgments. They check software behavior, not research quality. The repository includes a GitHub Actions workflow; hosted results are available only after a repository run.
+Tests use synthetic PDFs, mocked model responses, and synthetic review judgments. They check software behavior, not research quality. [GitHub Actions](https://github.com/wangxin-cell/research-workbench/actions/workflows/ci.yml) runs the tests and installed-package checks on Windows and Ubuntu with Python 3.11 and 3.13.
 
 Licensed under [MIT](LICENSE).

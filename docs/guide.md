@@ -2,7 +2,7 @@
 
 Run the commands below from the repository root. For the short introduction, see the [project README](../README.md).
 
-Turn a few papers and your research constraints into a traceable research decision: explore, revise, stop, or gather evidence. This is an early local Python implementation for a proposed open-source research-topic tool. The project name is provisional.
+Turn a few papers and your research constraints into a traceable research decision: explore, revise, stop, or gather evidence. Research Workbench is an early open-source local Python tool for this workflow.
 
 The current prototype includes a local browser interface, arXiv abstract search, selected PDF evidence passages, research constraints, source-linked research cards, offline prompt export and answer import, and optional model API generation. A separate review workflow snapshots case-specific criteria and preserves evidence-anchored, anonymous human judgments. It does not verify semantic entailment or establish novelty.
 
@@ -92,4 +92,4 @@ python -m unittest discover -s tests -v
 
 If a sandbox prevents use of the system temporary directory, set WORKBENCH_TEST_TEMP to an existing writable scratch directory. Install the optional PDF extra to run the parser and upload tests; otherwise those tests are explicitly skipped. The tests use synthetic PDF fixtures, provider doubles, and review judgments; passing them does not measure scientific idea quality.
 
-The next milestones are actual model validation and baseline comparisons, domain review of selected evidence, and independent user cases. Publication and any claim about adoption require further evidence.
+The next milestones are actual model validation and baseline comparisons, domain review of selected evidence, and independent user cases. The source is public; research usefulness and adoption still need evidence.

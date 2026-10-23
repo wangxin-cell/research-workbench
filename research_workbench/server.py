@@ -140,6 +140,8 @@ def make_handler(app):
                                           "version": "0.1.0"})
                 if route == "/api/examples":
                     return self.send(200, read_json(DATA / "exploration.json"))
+                if route == "/api/rl-starter":
+                    return self.send(200, read_json(DATA / "rl-starter.json"))
                 if route == "/demo":
                     cases = read_json(DATA / "exploration.json")["cases"]
                     case = next(c for c in cases if c["id"] == "EXP-C-GRAPH")

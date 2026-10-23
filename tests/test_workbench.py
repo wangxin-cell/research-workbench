@@ -116,6 +116,21 @@ class WorkbenchTests(unittest.TestCase):
         self.assertNotIn("<img src", html)
         self.assertIn("&lt;script&gt;", html)
 
+    def test_imported_starter_report_keeps_authorship_and_reading_boundary(self):
+        starter = read_json(Path(__file__).resolve().parents[1] /
+                            "research_workbench" / "data" / "rl-starter.json")
+        source = starter["papers"][0]["source"]
+        value, output = case(), report()
+        value["sources"] = [source]
+        output["findings"][0]["source_ids"] = [source["id"]]
+        path = self.manual_run(value, output)
+        html = (path / "report.html").read_text(encoding="utf-8")
+        self.assertIn("助手整理的入门摘要转述", html)
+        self.assertIn("不代表用户已阅读或人工核验", html)
+        self.assertIn(source["locator"], html)
+        self.assertIn(source["summary"], html)
+        self.assertNotIn("摘要转述或阅读笔记", html)
+
     def test_prepared_request_contains_no_scoring_material(self):
         path = prepare(self.root, case())
         self.assertEqual(read_json(path / "manifest.json")["status"], "prepared")
