@@ -30,6 +30,8 @@ For your own research:
 
 The prompt includes the required output format. Direct generation through the OpenAI API is optional; setup, usage, and costs are explained in the [guide](docs/guide.md).
 
+**Interested in deep reinforcement learning but haven't read papers yet?** Open **还没读过论文？从这里开始** in the materials panel. This pilot reading path starts with basic concepts, then introduces PPO and two papers on reliable evaluation. Each paper has a reading focus and a reflection question. Add an abstract paraphrase individually without replacing your question, constraints, or existing materials. These are assistant-written summaries of abstracts, not records of your reading, a survey of current research, or evidence of novelty. Start by understanding one paper and forming a replication or measurement question; add full-text evidence and recent work before judging contributions. The reading path is separate from the four development cases.
+
 To enable local PDF extraction, install the extra in the same Python environment and restart:
 
 ```sh

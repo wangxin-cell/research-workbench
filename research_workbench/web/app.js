@@ -116,7 +116,58 @@ function showReport(runId = null) {
   if (runId) $("download-report").href = "/files/" + runId + "/report.json";
   window.scrollTo(0, 0);
 }
+function paperIdentity(url) {
+  try {
+    const parsed = new URL(url);
+    const arxiv = parsed.pathname.match(/^\/(?:abs|pdf)\/(\d{4}\.\d{4,5})(?:v\d+)?(?:\.pdf)?\/?$/);
+    if (["arxiv.org", "www.arxiv.org", "export.arxiv.org"].includes(parsed.hostname) && arxiv) return "arxiv:" + arxiv[1];
+    return parsed.href;
+  } catch { return url; }
+}
+function hasPaper(source) {
+  return state.sources.some(s => s.id === source.id || (s.read_scope !== "pdf_excerpt" && paperIdentity(s.url) === paperIdentity(source.url)));
+}
+async function loadStarter() {
+  const host = $("starter-content");
+  try {
+    const starter = await api("/api/rl-starter");
+    host.replaceChildren(node("p", starter.description, "starter-intro"), node("p", starter.scope_note, "help"));
+    const primer = node("div", undefined, "starter-primer");
+    primer.append(node("span", "先认识基本概念", "starter-kicker"), link(starter.primer.title + " ↗", starter.primer.url), node("p", starter.primer.read_first, "help"));
+    host.append(primer);
+    const list = node("ol", undefined, "starter-list");
+    for (const [index, paper] of starter.papers.entries()) {
+      const item = node("li");
+      const heading = node("h3"); heading.append(link(paper.source.title + " ↗", paper.source.url));
+      item.append(node("span", "阅读 " + String(index + 1).padStart(2, "0"), "starter-kicker"), heading,
+        node("p", paper.read_first), node("p", "试着回答：" + paper.reflection, "starter-question"));
+      const details = node("details");
+      details.append(node("summary", "查看摘要转述与范围"), node("p", paper.source.summary), node("p", "范围：仅依据官方摘要，未阅读全文。", "help"));
+      const add = node("button", "加入摘要转述", "starter-add"); add.type = "button";
+      add.dataset.sourceId = paper.source.id; add.dataset.sourceUrl = paper.source.url;
+      add.setAttribute("aria-label", "加入摘要转述：" + paper.source.title);
+      add.addEventListener("click", () => {
+        if (hasPaper(paper.source)) { $("starter-status").textContent = "这篇论文已在材料中。"; return; }
+        if (state.sources.length >= 50) { $("starter-status").textContent = "一个项目最多包含 50 条材料，请先移除不需要的材料。"; return; }
+        state.sources.push(structuredClone(paper.source));
+        dirty(); renderSources();
+        $("starter-status").textContent = "已加入「" + paper.source.title + "」的摘要转述。加入不代表已经阅读；需要使用自己的笔记时，可移除转述后手动添加。";
+      });
+      item.append(details, add); list.append(item);
+    }
+    host.append(list, node("p", "先读懂一篇，再写下一个想验证的问题。复现与测量是起点；判断创新还需要补充近期工作、全文证据和研究条件。", "help"));
+    renderSources();
+  } catch {
+    host.replaceChildren(node("p", "入门材料暂时无法载入。你仍可检索文献或手动添加材料。", "help"));
+    const retry = node("button", "重新载入阅读路径"); retry.type = "button";
+    retry.addEventListener("click", () => { retry.disabled = true; loadStarter(); }); host.append(retry);
+  }
+}
 function renderSources() {
+  for (const button of document.querySelectorAll(".starter-add")) {
+    const added = hasPaper({ id: button.dataset.sourceId, url: button.dataset.sourceUrl });
+    button.disabled = added; button.textContent = added ? "已在材料中" : "加入摘要转述";
+  }
   for (const button of document.querySelectorAll(".search-result button")) {
     const added = state.sources.some(s => s.id === button.dataset.sourceId || (s.url === button.dataset.sourceUrl && s.read_scope !== "pdf_excerpt"));
     button.disabled = added; button.textContent = added ? "已添加" : "＋ 添加";
@@ -128,7 +179,7 @@ function renderSources() {
     const symbol = node("span", undefined, "empty-symbol");
     symbol.setAttribute("aria-hidden", "true");
     symbol.append($("add-pdf").querySelector("svg").cloneNode(true));
-    empty.append(symbol, node("strong", "把读过的论文，放到一起。"), node("p", "从 3—5 篇关键论文开始，逐步勾勒研究边界。"));
+    empty.append(symbol, node("strong", "从一篇相关论文开始。"), node("p", "加入摘要或阅读笔记，再逐步补充支持与反对的证据。"));
     host.append(empty); return;
   }
   state.sources.forEach((source, index) => {
@@ -141,7 +192,9 @@ function renderSources() {
     remove.addEventListener("click", () => { state.sources.splice(index, 1); dirty(); renderSources(); });
     const original = source.summary_author === "arxiv_original_abstract" || source.summary_author === "user_provided_abstract";
     const isExcerpt = source.read_scope === "pdf_excerpt";
-    content.append(node("h3", source.title), node("p", (isExcerpt ? "PDF 提取片段" : original ? "原始摘要" : "摘要转述 / 阅读笔记") + " · " + source.locator), details);
+    const curated = source.summary_author === "assistant_curated_abstract";
+    content.append(node("h3", source.title), node("p", (isExcerpt ? "PDF 提取片段" : original ? "原始摘要" : curated ? "入门摘要转述 · 不代表已阅读" : "摘要转述 / 阅读笔记") + " · " + source.locator), details);
+    if (curated) details.append(node("p", source.read_scope === "abstract_only" ? "范围：仅依据官方摘要，未阅读全文。" : source.read_scope, "help"));
     if (isExcerpt) details.append(node("p", "文件 SHA-256：" + source.evidence?.document_sha256 + " · 选取片段不代表已阅读全文", "help fingerprint"));
     actions.append(link("打开来源 ↗", source.url), remove); content.append(actions);
     card.append(node("span", String(index + 1).padStart(2, "0"), "source-index"), content); host.append(card);
@@ -375,3 +428,4 @@ async function init() {
 // Keep research history reachable on phones without filling the first screen.
 if (window.matchMedia("(max-width: 760px)").matches) document.querySelector(".history-section").open = false;
 init();
+loadStarter();
