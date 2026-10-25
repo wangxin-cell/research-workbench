@@ -78,11 +78,11 @@
         {
           "id": "tent",
           "title": "Tent: Fully Test-time Adaptation by Entropy Minimization",
-          "url": "https://arxiv.org/pdf/2006.10726",
-          "locator": "Sections 2 and 3; PDF pages 2–3",
-          "summary": "Tent 在不访问源训练数据的条件下，以测试预测熵为目标进行适应，估计归一化统计量并更新逐通道仿射参数。",
-          "read_scope": "pdf_text",
-          "checked_on": "2026-10-19",
+          "url": "https://arxiv.org/pdf/2006.10726v3",
+          "locator": "Section 2 (PDF p. 2); Sections 3.1–3.3 and Figure 4 (PDF pp. 3–4)",
+          "summary": "Tent 只需已训练模型和无标签目标数据；测试时最小化预测熵，从目标批次估计归一化统计量，优化逐通道仿射参数 γ、β，其余模型参数固定。统计量是从数据估计，仿射参数才由梯度优化；该方法不要求改变源训练过程。",
+          "read_scope": "selected_pdf_sections",
+          "checked_on": "2026-10-25",
           "summary_author": "assistant",
           "human_verified": false,
           "fulltext_snapshot_sha256": null
@@ -90,11 +90,11 @@
         {
           "id": "ttt",
           "title": "Test-Time Training with Self-Supervision for Generalization under Distribution Shifts",
-          "url": "https://arxiv.org/abs/1909.13231",
-          "locator": "Abstract",
-          "summary": "研究通过无标签测试样本形成自监督任务，在预测前更新模型参数的办法。",
-          "read_scope": "abstract",
-          "checked_on": "2026-10-19",
+          "url": "https://arxiv.org/pdf/1909.13231v3",
+          "locator": "Section 2, Method (PDF p. 2), Equations (2) and (3)",
+          "summary": "TTT 在训练阶段联合优化主任务和自监督辅助任务；本文使用旋转预测作为辅助任务。测试时通过最小化辅助任务损失更新共享特征提取器，再进行主任务预测。",
+          "read_scope": "selected_pdf_sections",
+          "checked_on": "2026-10-25",
           "summary_author": "assistant",
           "human_verified": false,
           "fulltext_snapshot_sha256": null
